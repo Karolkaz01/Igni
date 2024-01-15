@@ -1,47 +1,55 @@
-﻿using Core.Models.Notifications;
+﻿using Core.Enums;
+using Core.Models.Configuration;
+using Core.Models.Notifications;
+using Core.Services.Runners;
 using MediatR;
 using Microsoft.CognitiveServices.Speech;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Speech.Recognition;
 
 namespace Core.Services
 {
     public class RecognizeService : INotificationHandler<KeywordRecognizedNotification>
     {
-        private readonly SpeechService STTService;
-        private readonly KeywordService KWService;
+        private readonly SpeechService _STTService;
+        private readonly KeywordService _KWService;
+        private readonly ConfigurationService _configurationService;
+        private readonly CommandRunner _commandRunner;
+        private readonly PluginRunner _plugginRunner;
 
         private readonly IMediator _mediator;
 
-        public RecognizeService(SpeechService STTService, KeywordService KWService, IMediator mediator)
+        public RecognizeService(SpeechService STTService, KeywordService KWService, IMediator mediator,
+            ConfigurationService configurationService, CommandRunner commandRunner, PluginRunner pluginRunner)
         {
-            this.STTService = STTService;
-            this.KWService = KWService;
+            _STTService = STTService;
+            _KWService = KWService;
             _mediator = mediator;
+            _configurationService = configurationService;
+            _commandRunner = commandRunner;
+            _plugginRunner = pluginRunner;
         }
 
         public void StartRecognising()
         {
             Console.WriteLine("I'm listening...");
-            KWService.StartRecognising();
+            _KWService.StartRecognising();
         }
 
         public void StopRecognising()
         {
-            KWService.StopRecognising();
+            _KWService.StopRecognising();
         }
 
         public async Task Handle(KeywordRecognizedNotification notification, CancellationToken cancellationToken)
         {
             //TODO: add beep sound
             Console.Beep();
-            var response = await STTService.RecognizeOneSpeechAsync();
-            if(response.Reason == ResultReason.RecognizedSpeech)
+            var response = await _STTService.RecognizeOneSpeechAsync();
+            if (response.Reason == ResultReason.RecognizedSpeech)
             {
                 await _mediator.Publish(new RecognizedNotification(response.Text));
+                _commandRunner.PerformCommandsAsync(response.Text);
+                await _plugginRunner.PerformPluginsAsync(response.Text);
                 Console.WriteLine(response.Text);
             }
             else
@@ -49,8 +57,10 @@ namespace Core.Services
                 await _mediator.Publish(new UnrecognizedNotification());
                 Console.WriteLine(">Unrecognized !!!<");
             }
-            //TODO: log data
-            KWService.StartRecognising();
+            
+
+            _KWService.StartRecognising();
         }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Core
+﻿namespace IgniPlugin
 {
     public class Class1
     {

@@ -1,0 +1,58 @@
+{
+  "CommandSections": {
+    "OpenCommands": {
+      "name": "Open Commands",
+      "description": "All commands for opening apps",
+      "values": [
+        {
+          "activationCommand": "Open Postman",
+          "commandType": 0,
+          "value": "Start-Process Shell:AppsFolder\\'com.squirrel.Postman.Postman'"
+        },
+        {
+          "activationCommand": "Open Steam",
+          "commandType": 0,
+          "value": "Start-Process Shell:AppsFolder\\'{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}\\Steam\\Steam.exe'"
+        }
+      ]
+    },
+    "CommonCommands": {
+      "name": "Common commands",
+      "description": "Common commands for interacting with system",
+      "values": [
+        {
+          "activationCommand": "What time is it",
+          "commandType": 1,
+          "value": "Get-Date -Format 'dddd MM/dd/yyyy HH:mm K'"
+        },
+        {
+          "activationCommand": "Tell me, what time is it",
+          "commandType": 3,
+          "value": "TellMeWhatTimeIsIt.ps1"
+        },
+        {
+          "activationCommand": "Play Tetris melody",
+          "commandType": 2,
+          "value": "PlayTetricMelody.ps1"
+        }
+      ]
+    },
+    "SystemSettingsCommands": {
+      "name": "System settings commands",
+      "description": "Commands for interacting with system settings",
+      "values": [
+        {
+          "activationCommand": "Change theme mode",
+          "commandType": 2,
+          "value": "ChangeThemeMode.ps1"
+        }
+      ]
+    }
+  },
+  "settings": {
+    "language": "en-US"
+  },
+  "plugins": {
+
+  }
+}
