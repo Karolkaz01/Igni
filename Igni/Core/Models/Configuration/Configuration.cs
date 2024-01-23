@@ -10,6 +10,6 @@ namespace Core.Models.Configuration
     {
         public IDictionary<string, CommandSection> commandSections { get; set; }
         public IDictionary<string,string> settings { get; set; }
-        public IDictionary<string,bool> plugins { get; set; }
+        public IDictionary<string, PluginConfig> pluginsInfo { get; set; }
     }
 }

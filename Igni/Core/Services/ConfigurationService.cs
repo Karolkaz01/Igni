@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Models.Configuration;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,33 +45,45 @@ namespace Core.Services
             }
         }
 
-        public IDictionary<string, string> GetSettings()
+        public string GetSetting(string settingName)
+        {
+            return configuration?.settings?.FirstOrDefault(s => s.Key == settingName).Value ?? string.Empty;
+        }
+
+        public IDictionary<string, string> GetAllSettings()
         {
             return configuration?.settings ?? new Dictionary<string, string>();
         }
 
-        public IDictionary<string, bool> GetPluginSettins()
+        public IDictionary<string, PluginConfig> GetPluginSettins()
         {
-            return configuration?.plugins ?? new Dictionary<string, bool>();
+            return configuration?.pluginsInfo ?? new Dictionary<string, PluginConfig>();
         }
 
-        public void AddPluginSetting(string pluginName, bool isEnabled)
+        public void AddPluginSetting(string directoryName, string fileName)
         {
-            if (configuration?.plugins?.FirstOrDefault(p => p.Key == pluginName).Key != null)
+            if (configuration?.pluginsInfo?.FirstOrDefault(p => p.Key == fileName) != null)
             {
-                configuration.plugins[pluginName] = isEnabled;
+                Log.Warning("Can't add pluggin with the same name");
             }
             else
             {
-                configuration?.plugins?.Add(pluginName, isEnabled);
+                configuration?.pluginsInfo?.Add(
+                    fileName,
+                    new PluginConfig
+                    {
+                        DirectoryName = directoryName,
+                        FileName = fileName,
+                        IsEnabled = true
+                    });
             }
 
-            SaveConfiguration();
-            FethConfiguration();
+            Synchronize();
         }
 
         public async Task GenerateDefaultOpenAppCommandsAsync()
         {
+            Log.Information($"Generating default open commands");
             List<PSObject> appDictionaryPSObjects = (await _powerShellHandler.RunScript("Get-StartApps")).ToList();
             var apps = new Dictionary<string, string>();
             List<Command> commands = new List<Command>();
@@ -102,8 +115,7 @@ namespace Core.Services
                 });
             }
 
-            SaveConfiguration();
-            FethConfiguration();
+            Synchronize();
         }
 
         private void SaveConfiguration()
@@ -118,6 +130,12 @@ namespace Core.Services
             using StreamReader reader = new(_filePath);
             var json = reader.ReadToEnd();
             configuration = JsonConvert.DeserializeObject<Configuration>(json);
+        }
+
+        private void Synchronize()
+        {
+            SaveConfiguration();
+            FethConfiguration();
         }
     }
 }

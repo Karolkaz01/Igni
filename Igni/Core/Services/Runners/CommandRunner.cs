@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using Core.Models.Configuration;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,13 @@ namespace Core.Services.Runners
     {
         private readonly PowerShellHandler _powerShellHandler;
         private readonly ConfigurationService _configurationService;
+        private readonly ComunicationService _comunicationService;
 
-        public CommandRunner(PowerShellHandler powerShellHandler, ConfigurationService configurationService)
+        public CommandRunner(PowerShellHandler powerShellHandler, ConfigurationService configurationService, ComunicationService comunicationService)
         {
             _powerShellHandler = powerShellHandler;
             _configurationService = configurationService;
-
+            _comunicationService = comunicationService;
         }
 
         public async Task PerformCommandsAsync(string speech)
@@ -35,6 +37,8 @@ namespace Core.Services.Runners
 
         private async void CommandRecognizedAsync(Command command)
         {
+            Log.Information($"Command recognized: {command.activationCommand}");
+
             switch (command.commandType)
             {
                 case CommandType.runCommand:
@@ -53,8 +57,6 @@ namespace Core.Services.Runners
                     ErrorCommandType();
                     break;
             }
-
-            Console.WriteLine($"Command recognized: {command.activationCommand}");
         }
 
         private async void RunCommandAsync(Command command)
@@ -65,7 +67,9 @@ namespace Core.Services.Runners
         private async void RunFeedbackCommandAsync(Command command)
         {
             var feedback = await _powerShellHandler.RunScript(command.value);
-            Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
+            //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
+            if(feedback != null)
+                _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());
         }
 
         private async void RunScriptAsync(Command command)
@@ -76,7 +80,9 @@ namespace Core.Services.Runners
         private async void RunFeedbackScriptAsync(Command command)
         {
             var feedback = await _powerShellHandler.RunScriptByFileName(command.value);
-            Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
+            //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
+            if (feedback != null)
+                _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());
         }
 
         private void ErrorCommandType()

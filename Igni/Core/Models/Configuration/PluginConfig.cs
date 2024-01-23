@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core.Models.Configuration
 {
-    public class Settings
+    public class PluginConfig
     {
-        public string name { get; set; }
-        public string values { get; set; }
+        public string FileName { get; set; }
+        public string DirectoryName { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

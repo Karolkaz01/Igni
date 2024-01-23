@@ -2,9 +2,9 @@
 {
     public interface IIgniPlugin
     {
-        void InitializePlugin();
-        void PerformPlugin();
-        bool ExecuteContinues();
+        IIgniContext Context { get; set; }
 
+        void Initialize(CancellationToken? cancellationTokens);
+        void ExcecuteAsync(CancellationToken? cancellationToken, string speech);
     }
 }

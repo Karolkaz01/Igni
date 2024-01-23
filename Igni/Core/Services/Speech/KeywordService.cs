@@ -1,8 +1,9 @@
 ﻿using Core.Models.Notifications;
 using MediatR;
 using Microsoft.CognitiveServices.Speech;
+using Serilog;
 
-namespace Core.Services
+namespace Core.Services.Speech
 {
     public class KeywordService
     {
@@ -31,6 +32,7 @@ namespace Core.Services
 
         private async void OnKeywordRecognizedAsync(object? sender, KeywordRecognitionEventArgs e)
         {
+            Log.Information("Keyword recognized");
             await _mediator.Publish(new KeywordRecognizedNotification());
         }
     }

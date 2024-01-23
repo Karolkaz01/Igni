@@ -2,8 +2,10 @@
 using Core.Models.Configuration;
 using Core.Models.Notifications;
 using Core.Services.Runners;
+using Core.Services.Speech;
 using MediatR;
 using Microsoft.CognitiveServices.Speech;
+using Serilog;
 using System.Speech.Recognition;
 
 namespace Core.Services
@@ -12,19 +14,19 @@ namespace Core.Services
     {
         private readonly SpeechService _STTService;
         private readonly KeywordService _KWService;
-        private readonly ConfigurationService _configurationService;
+        private readonly ComunicationService _comunicationService;
         private readonly CommandRunner _commandRunner;
         private readonly PluginRunner _plugginRunner;
 
         private readonly IMediator _mediator;
 
         public RecognizeService(SpeechService STTService, KeywordService KWService, IMediator mediator,
-            ConfigurationService configurationService, CommandRunner commandRunner, PluginRunner pluginRunner)
+            ComunicationService comunicationService, CommandRunner commandRunner, PluginRunner pluginRunner)
         {
             _STTService = STTService;
             _KWService = KWService;
             _mediator = mediator;
-            _configurationService = configurationService;
+            _comunicationService = comunicationService;
             _commandRunner = commandRunner;
             _plugginRunner = pluginRunner;
         }
@@ -47,15 +49,15 @@ namespace Core.Services
             var response = await _STTService.RecognizeOneSpeechAsync();
             if (response.Reason == ResultReason.RecognizedSpeech)
             {
+                Log.Information($"Recognized speech: {response.Text}");
                 await _mediator.Publish(new RecognizedNotification(response.Text));
-                _commandRunner.PerformCommandsAsync(response.Text);
+                await _commandRunner.PerformCommandsAsync(response.Text);
                 await _plugginRunner.PerformPluginsAsync(response.Text);
-                Console.WriteLine(response.Text);
             }
             else
             {
                 await _mediator.Publish(new UnrecognizedNotification());
-                Console.WriteLine(">Unrecognized !!!<");
+                _comunicationService.Unrecognized();
             }
             
 

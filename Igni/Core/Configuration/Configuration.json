@@ -50,9 +50,14 @@
     }
   },
   "settings": {
-    "language": "en-US"
+    "language": "en-US",
+    "VoiceEnabled": true,
   },
-  "plugins": {
-
+  "pluginsInfo": {
+    "ChatBotPlugin.dll": {
+      "DirectoryName": "ChatBot",
+      "FileName": "ChatBotPlugin.dll",
+      "IsEnabled": true
+    }
   }
 }
