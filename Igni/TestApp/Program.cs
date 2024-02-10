@@ -35,7 +35,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<CommandRunner>();
         services.AddSingleton<PluginRunner>();
         services.AddSingleton<PluginsManager>();
-        services.AddSingleton<ComunicationService>();
+        services.AddSingleton<CommunicationService>();
         services.AddSingleton<IIgniContext,IgniContext>();
         services.AddMediatR(typeof(RecognizeService));
     })
@@ -49,5 +49,5 @@ Log.Logger = new LoggerConfiguration()
 var app = host.Services.GetService<RecognizeService>();
 var config = host.Services.GetService<ConfigurationService>();
 await config?.GenerateDefaultOpenAppCommandsAsync();
-app?.StartRecognising();
+app?.StartListening();
 await host.RunAsync();

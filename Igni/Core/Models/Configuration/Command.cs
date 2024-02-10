@@ -9,8 +9,8 @@ namespace Core.Models.Configuration
 {
     public class Command
     {
-        public string activationCommand { get; set; }
-        public CommandType commandType { get; set; }
-        public string value { get; set; }
+        public string ActivationCommand { get; set; }
+        public CommandType CommandType { get; set; }
+        public string Value { get; set; }
     }
 }

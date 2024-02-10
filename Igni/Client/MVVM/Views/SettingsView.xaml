@@ -1,0 +1,103 @@
+﻿<UserControl x:Name="userControl"  x:Class="Client.MVVM.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client.MVVM.Views"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"  VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Top">
+        <Grid VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90*"/>
+                    <ColumnDefinition Width="10*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" Command="{Binding SaveCommand}" Margin="10">
+                    <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20" />
+                </Button>
+
+                <Border Grid.Row="0" Margin="20" CornerRadius="10" Background="{StaticResource 3ColorTheme}" Width="Auto" MinWidth="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="10">
+                    <Grid Width="auto" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" FontSize="20" Foreground="White" >
+                        Activation KeyWord :
+                        </TextBlock>
+                        <ComboBox Width="200" 
+                          IsSynchronizedWithCurrentItem="True" 
+                          SelectedIndex="{Binding KeyWordIndex}"
+                          Grid.Column="1" 
+                          FontSize="20" 
+                          Margin="10,0,0,0" 
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"
+                          ItemsSource="{Binding ActivationKeys, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="1" Margin="20" CornerRadius="10" Background="{StaticResource 3ColorTheme}" Width="Auto" MinWidth="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="10">
+                    <Grid Width="auto" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" FontSize="20" Foreground="White" >
+                    Voice:
+                        </TextBlock>
+                        <ComboBox Width="200" 
+                  IsSynchronizedWithCurrentItem="True" 
+                  SelectedIndex="{Binding VoiceIndex}"
+                  Grid.Column="1" 
+                  FontSize="20" 
+                  Margin="10,0,0,0" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center"
+                  ItemsSource="{Binding Voices, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Border Grid.Row="1" Background="Transparent" CornerRadius="5" Margin="0,4" Padding="7">
+                <StackPanel>
+                    <DataGrid ItemsSource="{Binding Settings, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}"
+                          AutoGenerateColumns="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="False"
+                          CanUserResizeRows="False"
+                          RowStyle="{DynamicResource DataGridRowStyle1}"
+                          ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                          CellStyle="{DynamicResource DataGridCellStyle1}"
+                          Style="{DynamicResource DataGridStyle1}"
+                          HorizontalContentAlignment="Stretch">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="45*"/>
+                            <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="45*"/>
+                            <DataGridTemplateColumn Header="Actions" Width="10*" CellStyle="{StaticResource DataGridCellStyle2}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Button Style="{StaticResource gridEditButton}" Width="30" Height="30" Command="{Binding DataContext.DeleteSettingCommand, ElementName=userControl}" CommandParameter="{Binding}">
+                                                <fa:IconImage Icon="Trash" Width="15" Height="15" Foreground="White" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

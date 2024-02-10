@@ -14,30 +14,30 @@ namespace Core.Services
     {
         private readonly SpeechService _STTService;
         private readonly KeywordService _KWService;
-        private readonly ComunicationService _comunicationService;
+        private readonly CommunicationService _communicationService;
         private readonly CommandRunner _commandRunner;
-        private readonly PluginRunner _plugginRunner;
+        private readonly PluginRunner _pluginRunner;
 
         private readonly IMediator _mediator;
 
         public RecognizeService(SpeechService STTService, KeywordService KWService, IMediator mediator,
-            ComunicationService comunicationService, CommandRunner commandRunner, PluginRunner pluginRunner)
+            CommunicationService communicationService, CommandRunner commandRunner, PluginRunner pluginRunner)
         {
             _STTService = STTService;
             _KWService = KWService;
             _mediator = mediator;
-            _comunicationService = comunicationService;
+            _communicationService = communicationService;
             _commandRunner = commandRunner;
-            _plugginRunner = pluginRunner;
+            _pluginRunner = pluginRunner;
         }
 
-        public void StartRecognising()
+        public void StartListening()
         {
             Console.WriteLine("I'm listening...");
             _KWService.StartRecognising();
         }
 
-        public void StopRecognising()
+        public void StopListening()
         {
             _KWService.StopRecognising();
         }
@@ -52,15 +52,13 @@ namespace Core.Services
                 Log.Information($"Recognized speech: {response.Text}");
                 await _mediator.Publish(new RecognizedNotification(response.Text));
                 await _commandRunner.PerformCommandsAsync(response.Text);
-                await _plugginRunner.PerformPluginsAsync(response.Text);
+                await _pluginRunner.PerformPluginsAsync(response.Text);
             }
             else
             {
                 await _mediator.Publish(new UnrecognizedNotification());
-                _comunicationService.Unrecognized();
+                _communicationService.Unrecognized();
             }
-            
-
             _KWService.StartRecognising();
         }
 

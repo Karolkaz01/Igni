@@ -1,0 +1,80 @@
+﻿<UserControl x:Name="userControl" x:Class="Client.MVVM.Views.PluginsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:local="clr-namespace:Client.MVVM.Views"
+             xmlns:valid="clr-namespace:Client.MVVM.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Top">
+            <StackPanel>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Justify"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,0,0,20">
+                            Explore boundless possibilities in our Plugins Management Tab, your gateway to a personalized application experience. Effortlessly enhance your toolkit by adding new plugins, tidy up by removing unnecessary ones, and seize control with the ability to toggle plugins on or off. This centralized hub puts customization at your fingertips, ensuring your app evolves alongside your preferences. Let your creativity flourish as you shape the perfect ecosystem for your needs.
+                        </TextBlock>
+                        <Button Grid.Column="1" Style="{StaticResource saveButton}"  Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
+                            <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <Border Background="Transparent" CornerRadius="5" Margin="0,4" Padding="7">
+                    <StackPanel>
+                        <DataGrid ItemsSource="{Binding PluginsList, UpdateSourceTrigger=PropertyChanged}"
+                                      AutoGenerateColumns="False"
+                                      CanUserReorderColumns="False"
+                                      CanUserResizeColumns="False"
+                                      CanUserResizeRows="False"
+                                      RowStyle="{DynamicResource DataGridRowStyle1}"
+                                      ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                                      CellStyle="{DynamicResource DataGridCellStyle1}"
+                                      Style="{DynamicResource DataGridStyle1}"
+                                      HorizontalContentAlignment="Stretch"
+                                      >
+                            <DataGrid.RowValidationRules>
+                                <valid:PluginValidationRule ValidationStep="CommittedValue"/>
+                            </DataGrid.RowValidationRules>
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Binding="{Binding IsEnabled}" Width="7*" CellStyle="{StaticResource DataGridCellStyle2}">
+                                    <DataGridCheckBoxColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <fa:IconImage Icon="CheckSquare" Width="22" Height="22" Foreground="White"/>
+                                        </DataTemplate>
+                                    </DataGridCheckBoxColumn.HeaderTemplate>
+                                </DataGridCheckBoxColumn>
+                                <DataGridTextColumn Header="Plugin Name" Binding="{Binding PluginName}" Width="28*"/>
+                                <DataGridTextColumn Header="Folder Name" Binding="{Binding DirectoryName}" Width="28*"/>
+                                <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="28*"/>
+                                <DataGridTemplateColumn Header="Actions" Width="10*" CellStyle="{StaticResource DataGridCellStyle2}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <Button Style="{StaticResource gridEditButton}" Width="30" Height="30" Command="{Binding DataContext.DeletePluginCommand, ElementName=userControl}" CommandParameter="{Binding}">
+                                                    <fa:IconImage Icon="Trash" Width="15" Height="15" Foreground="White" />
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -13,9 +13,9 @@ namespace Core.Services.Runners
     {
         private readonly PowerShellHandler _powerShellHandler;
         private readonly ConfigurationService _configurationService;
-        private readonly ComunicationService _comunicationService;
+        private readonly CommunicationService _comunicationService;
 
-        public CommandRunner(PowerShellHandler powerShellHandler, ConfigurationService configurationService, ComunicationService comunicationService)
+        public CommandRunner(PowerShellHandler powerShellHandler, ConfigurationService configurationService, CommunicationService comunicationService)
         {
             _powerShellHandler = powerShellHandler;
             _configurationService = configurationService;
@@ -28,7 +28,7 @@ namespace Core.Services.Runners
             var text = speech.ToLower();
             foreach (var command in allCommands)
             {
-                if (text.StartsWith(command.activationCommand.ToLower()))
+                if (text.StartsWith(command.ActivationCommand.ToLower()))
                 {
                     CommandRecognizedAsync(command);
                 }
@@ -37,9 +37,9 @@ namespace Core.Services.Runners
 
         private async void CommandRecognizedAsync(Command command)
         {
-            Log.Information($"Command recognized: {command.activationCommand}");
+            Log.Information($"Command recognized: {command.ActivationCommand}");
 
-            switch (command.commandType)
+            switch (command.CommandType)
             {
                 case CommandType.runCommand:
                     RunCommandAsync(command);
@@ -61,12 +61,12 @@ namespace Core.Services.Runners
 
         private async void RunCommandAsync(Command command)
         {
-            await _powerShellHandler.RunScript(command.value);
+            await _powerShellHandler.RunScript(command.Value);
         }
 
         private async void RunFeedbackCommandAsync(Command command)
         {
-            var feedback = await _powerShellHandler.RunScript(command.value);
+            var feedback = await _powerShellHandler.RunScript(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if(feedback != null)
                 _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());
@@ -74,12 +74,12 @@ namespace Core.Services.Runners
 
         private async void RunScriptAsync(Command command)
         {
-            await _powerShellHandler.RunScriptByFileName(command.value);
+            await _powerShellHandler.RunScriptByFileName(command.Value);
         }
 
         private async void RunFeedbackScriptAsync(Command command)
         {
-            var feedback = await _powerShellHandler.RunScriptByFileName(command.value);
+            var feedback = await _powerShellHandler.RunScriptByFileName(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if (feedback != null)
                 _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());

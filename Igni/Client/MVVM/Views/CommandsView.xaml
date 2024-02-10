@@ -1,0 +1,100 @@
+﻿<UserControl x:Name="userControl" x:Class="Client.MVVM.Views.CommandsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client.MVVM.Views"
+             xmlns:enums="Core.Enums"
+             xmlns:valid="clr-namespace:Client.MVVM.Models"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Top">
+            <StackPanel>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Text="{Binding Description}"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Justify"
+                                   HorizontalAlignment="Left"
+                                   Margin="0,0,0,20">
+                            Command Board is a versatile and user-friendly feature designed to empower users with the ability to seamlessly manage and customize a wide array of commands. This section serves as a centralized hub where users can effortlessly add, modify, and remove commands, categorized into distinct sections with clear names and descriptions. Each command falls into one of four types, enhancing the user experience: regular command, command with feedback, basic script, and script with feedback.
+                        </TextBlock>
+                        <Button Grid.Column="1" Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
+                            <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding CommandSections, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="Transparent" CornerRadius="5" Margin="0,4">
+                                <Expander Style="{DynamicResource ExpanderStyle1}" Header="{Binding DisplayName}" FontSize="16" Foreground="White" Padding="5">
+                                    <StackPanel>
+                                        <StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Row="0" Text="{Binding Description}"
+                                                           Foreground="White"
+                                                           FontSize="16"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Left"
+                                                           TextWrapping="Wrap"
+                                                           TextAlignment="Justify"/>
+                                                <Button Grid.Column="1" Style="{StaticResource gridEditButton}" Width="60" Height="35" HorizontalAlignment="Right" Command="{Binding DataContext.DeleteSectionCommand ,ElementName=userControl}" CommandParameter="{Binding}" Margin="10">
+                                                    <fa:IconImage Icon="TrashAlt" Width="20" Height="20" Foreground="White"/>
+                                                </Button>
+                                            </Grid>
+                                        </StackPanel>
+                                        <DataGrid ItemsSource="{Binding Values , UpdateSourceTrigger=PropertyChanged}"
+                                                  AutoGenerateColumns="False"
+                                                  CanUserReorderColumns="False"
+                                                  CanUserResizeColumns="False"
+                                                  CanUserResizeRows="False"
+                                                  RowStyle="{DynamicResource DataGridRowStyle1}"
+                                                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                                                  CellStyle="{DynamicResource DataGridCellStyle1}"
+                                                  Style="{DynamicResource DataGridStyle1}"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  >
+                                            <DataGrid.RowValidationRules>
+                                                <valid:CommandValidationRule ValidationStep="CommittedValue"/>
+                                            </DataGrid.RowValidationRules>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Activation command" Binding="{Binding ActivationCommand}" Width="25*"/>
+                                                <DataGridTextColumn Header="Command Type" Binding="{Binding CommandType}" Width="20*"/>
+                                                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="45*"/>
+                                                <DataGridTemplateColumn Header="Actions" Width="10*" CellStyle="{StaticResource DataGridCellStyle2}">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel>
+                                                                <Button Style="{StaticResource gridEditButton}" Width="30" Height="30" Command="{Binding DataContext.DeleteCommandCommand, ElementName=userControl}" CommandParameter="{Binding}">
+                                                                    <fa:IconImage Icon="Trash" Width="15" Height="15" Foreground="White" />
+                                                                </Button>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </Expander>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -18,7 +18,6 @@ namespace Core.Services.Plugins
         private readonly ConfigurationService _configurationService;
         private readonly IIgniContext _igniContext;
 
-
         public PluginsManager(ConfigurationService configurationService, IIgniContext igniContext)
         {
             _configurationService = configurationService;
@@ -29,44 +28,22 @@ namespace Core.Services.Plugins
         {
             var pluginsLists = new Dictionary<PluginConfig, IIgniPlugin>();
 
-            var direcories = Directory.GetDirectories(Paths.PLUGINS).Select(Path.GetFileName).ToArray();
-            var pluginsConfigs = _configurationService.GetPluginSettins().Where(p => direcories.Contains(p.Value.DirectoryName))
+            var directories = Directory.GetDirectories(Paths.PLUGINS).Select(Path.GetFileName).ToArray();
+            var pluginsConfigsDictionary = _configurationService.GetPluginSetting().Where(p => directories.Contains(p.Value.DirectoryName))
                 .ToDictionary();
 
-            foreach (var pluginConfig in pluginsConfigs)
+            foreach (var pluginConfigKeyValue in pluginsConfigsDictionary)
             {
-                var pluginAssambly = LoadAssemblyPlugin(pluginConfig.Value);
-                var pluginInstance = CreatePlugin(pluginAssambly);
+                var pluginAssembly = LoadAssemblyPlugin(pluginConfigKeyValue.Value);
+                var pluginInstance = CreatePlugin(pluginAssembly);
 
                 if (pluginInstance != null)
                 {
-                    pluginsLists.Add(pluginConfig.Value, pluginInstance);
+                    pluginsLists.Add(pluginConfigKeyValue.Value, pluginInstance);
                 }
             }
 
             return pluginsLists;
-        }
-
-        private void LoadAndCreatePlugin(List<IIgniPlugin> pluginsLists, string file)
-        {
-
-
-            //var assembly = Assembly.LoadFile(Path.Combine(Directory.GetCurrentDirectory(), file));
-            //var types = assembly.GetTypes().Where(t => typeof(IIgniPlugin).IsAssignableFrom(t) && !t.IsInterface).ToArray();
-
-            //foreach (var type in types)
-            //{
-            //    if (type.GetInterface(typeof(IIgniPlugin).ToString()) != null)
-            //    {
-            //        var plugin = Activator.CreateInstance(type, assembly) as IIgniPlugin;
-
-            //        if (plugin != null)
-            //            pluginsLists.Add(plugin);
-            //        else
-            //            throw new Exception("Plugin is null");
-            //    }
-            //}
-            //LoadCongiguration(pluginsLists);
         }
 
         private Assembly LoadAssemblyPlugin(PluginConfig pluginConfig)
@@ -77,9 +54,9 @@ namespace Core.Services.Plugins
             return loadContext.LoadFromAssemblyName(AssemblyName.GetAssemblyName(pluginPath));
         }
 
-        private IIgniPlugin? CreatePlugin(Assembly pluginAssambly)
+        private IIgniPlugin? CreatePlugin(Assembly pluginAssembly)
         {
-            var types = pluginAssambly.GetTypes();
+            var types = pluginAssembly.GetTypes();
                 //.Where(t => typeof(IIgniPlugin).IsAssignableFrom(t) && !t.IsInterface).ToArray();
 
             foreach (var type in types)
@@ -96,9 +73,9 @@ namespace Core.Services.Plugins
             return null;
         }
 
-        private void LoadCongiguration(List<IIgniPlugin> pluginsLists)
+        private void LoadConfiguration(List<IIgniPlugin> pluginsLists)
         {
-            var pluginsConfig = _configurationService.GetPluginSettins();
+            var pluginsConfig = _configurationService.GetPluginSetting();
             foreach (var plugin in pluginsLists)
             {
                 if (!pluginsConfig.ContainsKey(plugin.ToString()))

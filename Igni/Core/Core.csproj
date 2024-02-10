@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Plugins\" />
   </ItemGroup>
@@ -27,6 +26,15 @@
 
   <ItemGroup>
     <None Update="Configuration\Configuration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HelloIgniTestModel.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HeyIgni.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Plugins\PluginsHere.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Plugins\PutPluginsHere.txt">

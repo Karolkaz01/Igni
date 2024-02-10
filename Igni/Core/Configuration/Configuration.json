@@ -51,7 +51,17 @@
   },
   "settings": {
     "language": "en-US",
-    "VoiceEnabled": true,
+    "ActivationKeyword": "E:\\HeyIgni.table",
+    "VoiceEnabled": true
+  },
+  "KeyWords": {
+    "Hello Igni": "HelloIgniTestModel.table",
+    "Hey Igni": "HeyIgni.table"
+  },
+  "Voices": {
+    "Neil": "en-AU-NeilNeural",
+    "William": "en-AU-WilliamNeural",
+    "Natasha": "en-AU-NatashaNeural"
   },
   "pluginsInfo": {
     "ChatBotPlugin.dll": {

@@ -3,19 +3,13 @@ using Core.Enums;
 using Core.Models.Configuration;
 using Newtonsoft.Json;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using System.Management.Automation.Tracing;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
     public class ConfigurationService
     {
-        private Configuration configuration;
+        private ConfigurationModel configuration;
         private readonly PowerShellHandler _powerShellHandler;
 
         private readonly string _filePath;
@@ -24,19 +18,24 @@ namespace Core.Services
         {
             _filePath = Directory.GetCurrentDirectory() + Paths.CONFIGURATION;
             _powerShellHandler = powerShellHandler;
-            FethConfiguration();
+            FetchConfiguration();
         }
 
-        public CommandSection? GetSection(string sectionName)
+        public CommandSection? GetCommandSection(string sectionName)
         {
-            return configuration?.commandSections?.FirstOrDefault(s => s.Key == sectionName).Value;
+            return configuration?.CommandSections?.FirstOrDefault(s => s.Key == sectionName).Value;
+        }
+
+        public IDictionary<string, CommandSection> GetAllCommandSections()
+        {
+            return configuration?.CommandSections;
         }
 
         public List<Command> GetAllCommands()
         {
             try
             {
-                return configuration?.commandSections?.SelectMany(s => s.Value.values?.Select(v => v)).ToList() ?? new List<Command>();
+                return configuration?.CommandSections?.SelectMany(s => s.Value.Values?.Select(v => v)).ToList() ?? new List<Command>();
             }
             catch
             {
@@ -45,30 +44,64 @@ namespace Core.Services
             }
         }
 
-        public string GetSetting(string settingName)
+        public void SetSetting(string key, string value)
         {
-            return configuration?.settings?.FirstOrDefault(s => s.Key == settingName).Value ?? string.Empty;
+            var settingValue = GetSetting(key);
+            if(settingValue == null)
+            {
+                configuration?.Settings?.Add(key, value);
+            }
+            else
+            {
+                configuration.Settings[key] = value;
+            }
+            Synchronize();
+        }
+
+        public void DeleteSetting(string key)
+        {
+            var settingValue = GetSetting(key);
+            if(settingValue != null)
+            {
+                configuration?.Settings?.Remove(key);
+                Synchronize();
+            }
+        }
+
+        public IDictionary<string, string> GetKeyWords()
+        {
+            return configuration?.KeyWords ?? new Dictionary<string, string>();
+        }
+
+        public IDictionary<string, string> GetVoices()
+        {
+            return configuration?.Voices ?? new Dictionary<string, string>();
+        }
+
+        public string? GetSetting(string settingName)
+        {
+            return configuration?.Settings?.FirstOrDefault(s => s.Key == settingName).Value;
         }
 
         public IDictionary<string, string> GetAllSettings()
         {
-            return configuration?.settings ?? new Dictionary<string, string>();
+            return configuration?.Settings ?? new Dictionary<string, string>();
         }
 
-        public IDictionary<string, PluginConfig> GetPluginSettins()
+        public IDictionary<string, PluginConfig> GetPluginSetting()
         {
-            return configuration?.pluginsInfo ?? new Dictionary<string, PluginConfig>();
+            return configuration?.PluginsInfo ?? new Dictionary<string, PluginConfig>();
         }
 
         public void AddPluginSetting(string directoryName, string fileName)
         {
-            if (configuration?.pluginsInfo?.FirstOrDefault(p => p.Key == fileName) != null)
+            if (configuration?.PluginsInfo?.FirstOrDefault(p => p.Key == fileName) != null)
             {
                 Log.Warning("Can't add pluggin with the same name");
             }
             else
             {
-                configuration?.pluginsInfo?.Add(
+                configuration?.PluginsInfo?.Add(
                     fileName,
                     new PluginConfig
                     {
@@ -95,27 +128,54 @@ namespace Core.Services
                 if (name != null && appID != null && !apps.ContainsKey(name))
                     commands.Add(new Command
                     {
-                        activationCommand = $"Open {name}",
-                        commandType = CommandType.runCommand,
-                        value = $"start shell:appsFolder\\'{appID}'"
+                        ActivationCommand = $"Open {name}",
+                        CommandType = CommandType.runCommand,
+                        Value = $"start shell:appsFolder\\'{appID}'"
                     });
             }
 
-            if (configuration?.commandSections?.FirstOrDefault(s => s.Key == "OpenCommands").Key != null)
+            if (configuration?.CommandSections?.FirstOrDefault(s => s.Key == "OpenCommands").Key != null)
             {
-                configuration.commandSections["OpenCommands"].values = commands;
+                configuration.CommandSections["OpenCommands"].Values = commands;
             }
             else
             {
-                configuration?.commandSections?.Add("OpenCommands", new CommandSection
+                configuration?.CommandSections?.Add("OpenCommands", new CommandSection
                 {
-                    name = "Open Commands",
-                    description = "All commands for opening apps",
-                    values = commands
+                    Name = "Open Commands",
+                    Description = "All commands for opening apps",
+                    Values = commands
                 });
             }
 
             Synchronize();
+        }
+
+        public void SaveCommandConfig(IDictionary<string,CommandSection> commandConfig)
+        {
+            if (commandConfig != null)
+            {
+                configuration.CommandSections = commandConfig;
+                Synchronize();
+            }
+        }
+
+        public void SavePluginConfig(IDictionary<string, PluginConfig> pluginConfig)
+        {
+            if(pluginConfig != null)
+            {
+                configuration.PluginsInfo = pluginConfig;
+                Synchronize();
+            }
+        }
+
+        public void SaveSettingsConfig(IDictionary<string, string> settingsConfig)
+        {
+            if (settingsConfig != null)
+            {
+                configuration.Settings = settingsConfig;
+                Synchronize();
+            }
         }
 
         private void SaveConfiguration()
@@ -125,17 +185,17 @@ namespace Core.Services
             File.WriteAllText(_filePath, json);
         }
 
-        private void FethConfiguration()
+        private void FetchConfiguration()
         {
             using StreamReader reader = new(_filePath);
             var json = reader.ReadToEnd();
-            configuration = JsonConvert.DeserializeObject<Configuration>(json);
+            configuration = JsonConvert.DeserializeObject<ConfigurationModel>(json);
         }
 
         private void Synchronize()
         {
             SaveConfiguration();
-            FethConfiguration();
+            FetchConfiguration();
         }
     }
 }

@@ -8,8 +8,8 @@ namespace Core.Models.Configuration
 {
     public class CommandSection
     {
-        public string? name { get; set; }
-        public string? description { get; set; }
-        public IEnumerable<Command>? values { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public IEnumerable<Command>? Values { get; set; }
     }
 }

@@ -13,13 +13,16 @@ namespace Core.Services
     public class IgniContext : IIgniContext
     {
         private readonly SpeechService _speechService;
-        private readonly ComunicationService _comunicationService;
+        private readonly CommunicationService _comunicationService;
+        private readonly ConfigurationService _configurationService;
 
-        public IgniContext(SpeechService speechService, ComunicationService comunicationService)
+        public IgniContext(SpeechService speechService, CommunicationService comunicationService, ConfigurationService configurationService)
         {
             _speechService = speechService;
             _comunicationService = comunicationService;
+            _configurationService = configurationService;
         }
+
         public async Task<SpeechRecognitionResult> RecognizeOneSpeechAsync()
         {
             var response = await _speechService.RecognizeOneSpeechAsync();

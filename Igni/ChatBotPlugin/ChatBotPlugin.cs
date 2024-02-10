@@ -8,7 +8,7 @@ namespace ChatBotPlugin
     {
         public IIgniContext Context { get; set; }
 
-        //private readonly string APIKey = "";
+        private readonly string APIKey = "";
         private readonly string endpoint = "https://api.openai.com/v1/chat/completions";
 
         private readonly OpenAIAPI OpenAi;
