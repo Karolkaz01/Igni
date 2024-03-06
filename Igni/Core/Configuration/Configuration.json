@@ -23,7 +23,7 @@
         {
           "activationCommand": "What time is it",
           "commandType": 1,
-          "value": "Get-Date -Format 'dddd MM/dd/yyyy HH:mm K'"
+          "value": "Get-Date -Format 'HH:mm'"
         },
         {
           "activationCommand": "Tell me, what time is it",
@@ -47,16 +47,26 @@
           "value": "ChangeThemeMode.ps1"
         }
       ]
+    },
+    "UserCommands": {
+      "name": "User commands",
+      "description": "Commands created by user",
+      "values": [
+      ]
     }
   },
   "settings": {
-    "language": "en-US",
-    "ActivationKeyword": "E:\\HeyIgni.table",
-    "VoiceEnabled": true
+    "ActivationKeyword": "HeyCompyuter.table",
+    "Voice": "en-AU-NeilNeural",
+    "PopUpWindowEnabled": true,
+    "ResponseTextEnabled  ": true,
+    "PopUpDisappearTimer": 3
   },
   "KeyWords": {
     "Hello Igni": "HelloIgniTestModel.table",
-    "Hey Igni": "HeyIgni.table"
+    "Hey Igni": "HeyIgni.table",
+    "Hey Compyuter": "HeyCompyuter.table",
+    "None":  "None"
   },
   "Voices": {
     "Neil": "en-AU-NeilNeural",

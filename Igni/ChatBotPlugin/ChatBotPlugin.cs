@@ -23,8 +23,17 @@ namespace ChatBotPlugin
         {
         }
 
-        public async void ExcecuteAsync(CancellationToken? cancellationToken, string speech)
+        public async void Execute(CancellationToken? cancellationToken, string speech)
         {
+            var conversation = OpenAi.Chat.CreateConversation();
+
+            if (Context.GetCurrentCommandRunCount() == 0)
+            {
+                conversation.AppendUserInput(speech);
+                var response = await conversation.GetResponseFromChatbotAsync();
+                Context.Speak(response);
+            }
+
             if (!speech.Equals("Listen."))
                 return;
 
@@ -36,7 +45,7 @@ namespace ChatBotPlugin
 
                 if (speechResult.Reason == ResultReason.RecognizedSpeech)
                 {
-                    if(speechResult.Text.Equals("Stop listening."))
+                    if (speechResult.Text.Equals("Stop listening."))
                     {
                         Context.Speak("Ok, I'll stop listening.");
                         break;
@@ -46,7 +55,7 @@ namespace ChatBotPlugin
                     var response = await conversation.GetResponseFromChatbotAsync();
                     Context.Speak(response);
                 }
-                else if(speechResult.Reason == ResultReason.NoMatch)
+                else if (speechResult.Reason == ResultReason.NoMatch)
                 {
                     Context.Speak("Sorry, I didn't understand that.");
                 }

@@ -9,7 +9,7 @@ namespace Core.Enums
     public enum CommandType
     {
         runCommand = 0,
-        feedbackCoomand = 1,
+        feedbackCommand = 1,
         runScript = 2,
         feedbackScript = 3,
     }

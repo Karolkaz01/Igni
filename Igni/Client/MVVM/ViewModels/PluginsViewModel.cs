@@ -7,8 +7,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Client.MVVM.ViewModels
 {
@@ -27,6 +29,50 @@ namespace Client.MVVM.ViewModels
             {
                 pluginsList = value;
                 OnPropertyChanged(nameof(PluginsList));
+            }
+        }
+
+        private string infoText = string.Empty;
+
+        public string InfoText
+        {
+            get
+            {
+                return infoText;
+            }
+            set
+            {
+                infoText = value;
+                OnPropertyChanged(nameof(InfoText));
+            }
+        }
+
+        private Brush infoColor = new SolidColorBrush(Colors.Green);
+
+        public Brush InfoColor
+        {
+            get
+            {
+                return infoColor;
+            }
+            set
+            {
+                infoColor = value;
+                OnPropertyChanged(nameof(InfoColor));
+            }
+        }
+
+        private Visibility infoVisible = Visibility.Collapsed;
+        public Visibility InfoVisible
+        {
+            get
+            {
+                return infoVisible;
+            }
+            set
+            {
+                infoVisible = value;
+                OnPropertyChanged(nameof(InfoVisible));
             }
         }
 
@@ -61,6 +107,7 @@ namespace Client.MVVM.ViewModels
         {
             var pluginConfig = GetPluginConfig();
             _configurationService.SavePluginConfig(pluginConfig);
+            DisplayInformation("Data has been successfully saved", false);
         }
 
         private IDictionary<string, PluginConfig> GetPluginConfig()
@@ -84,6 +131,18 @@ namespace Client.MVVM.ViewModels
             {
                 PluginsList.Remove(pluginInfoMVVM);
             }
+        }
+
+        private async void DisplayInformation(string text, bool isError)
+        {
+            InfoText = text;
+            InfoColor = isError ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
+            InfoVisible = Visibility.Visible;
+
+            await Task.Delay(3000);
+
+            InfoVisible = Visibility.Collapsed;
+
         }
     }
 }

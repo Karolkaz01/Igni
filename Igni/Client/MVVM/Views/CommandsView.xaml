@@ -28,10 +28,16 @@
                                    Margin="0,0,0,20">
                             Command Board is a versatile and user-friendly feature designed to empower users with the ability to seamlessly manage and customize a wide array of commands. This section serves as a centralized hub where users can effortlessly add, modify, and remove commands, categorized into distinct sections with clear names and descriptions. Each command falls into one of four types, enhancing the user experience: regular command, command with feedback, basic script, and script with feedback.
                         </TextBlock>
-                        <Button Grid.Column="1" Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
-                            <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
-                        </Button>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <Button Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+                                <fa:IconImage Foreground="White" Icon="Folder" Width="20" Height="20"/>
+                            </Button>
+                            <Button Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
+                                <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
+                            </Button>
+                        </StackPanel>
                     </Grid>
+                    <Label Visibility="{Binding InfoVisible}" FontWeight="Bold" HorizontalAlignment="Center" Content="{Binding InfoText}" Foreground="{Binding InfoColor}" FontSize="20" />
                 </StackPanel>
                 <ItemsControl ItemsSource="{Binding CommandSections, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemTemplate>

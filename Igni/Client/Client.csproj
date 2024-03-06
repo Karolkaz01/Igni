@@ -6,15 +6,19 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\icon.ico" />
     <None Remove="Images\IgniIcon.png" />
+    <None Remove="Images\IgniIconOld.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Fonts\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +40,16 @@
     <Resource Include="Images\IgniIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\IgniIconOld.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Images\IgniIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\IgniIconOld.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

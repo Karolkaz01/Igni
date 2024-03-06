@@ -9,9 +9,6 @@ namespace Client
 {
     public class ViewModelLocator
     {
-        public MainWindowViewModel MainWindowViewModel
-        {
-            get { return IocConfiguration.Get<MainWindowViewModel>(); }
-        }
+        
     }
 }

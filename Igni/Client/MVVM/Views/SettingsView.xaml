@@ -12,18 +12,21 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="90*"/>
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" Command="{Binding SaveCommand}" Margin="10">
+                <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" Command="{Binding SaveCommand}" Margin="10">
                     <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20" />
                 </Button>
 
@@ -54,21 +57,58 @@
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" FontSize="20" Foreground="White" >
-                    Voice:
+                            Voice :
                         </TextBlock>
                         <ComboBox Width="200" 
-                  IsSynchronizedWithCurrentItem="True" 
-                  SelectedIndex="{Binding VoiceIndex}"
-                  Grid.Column="1" 
-                  FontSize="20" 
-                  Margin="10,0,0,0" 
-                  HorizontalAlignment="Center" 
-                  VerticalAlignment="Center"
-                  ItemsSource="{Binding Voices, Mode=TwoWay}"/>
+                                  IsSynchronizedWithCurrentItem="True" 
+                                  SelectedIndex="{Binding VoiceIndex}"
+                                  Grid.Column="1" 
+                                  FontSize="20" 
+                                  Margin="10,0,0,0" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{Binding Voices, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="2" Margin="20" CornerRadius="10" Background="{StaticResource 3ColorTheme}" Width="Auto" MinWidth="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="10">
+                    <Grid Width="auto" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" FontSize="20" Foreground="White" >
+                            PopUp Window enabled : 
+                        </TextBlock>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                  Grid.Column="1" 
+                                  FontSize="20" 
+                                  Margin="10,0,0,0" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"
+                                  IsChecked="{Binding PopUpWindowEnabled}"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="3" Margin="20" CornerRadius="10" Background="{StaticResource 3ColorTheme}" Width="Auto" MinWidth="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Padding="10">
+                    <Grid Width="auto" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" FontSize="20" Foreground="White" >
+                            Display Response as Text :
+                        </TextBlock>
+                        <CheckBox Style="{StaticResource CheckBoxStyle}"
+                                  Grid.Column="1" 
+                                  FontSize="20" 
+                                  Margin="10,0,0,0" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"
+                                  IsChecked="{Binding ResponseTextEnabled}"/>
                     </Grid>
                 </Border>
             </Grid>
-            <Border Grid.Row="1" Background="Transparent" CornerRadius="5" Margin="0,4" Padding="7">
+            <Label Grid.Row="1" Visibility="{Binding InfoVisible}" FontWeight="Bold" HorizontalAlignment="Center" Content="{Binding InfoText}" Foreground="{Binding InfoColor}" FontSize="20" />
+            <Border Grid.Row="2" Background="Transparent" CornerRadius="5" Margin="0,4" Padding="7">
                 <StackPanel>
                     <DataGrid ItemsSource="{Binding Settings, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}"
                           AutoGenerateColumns="False"

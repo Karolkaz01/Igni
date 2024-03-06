@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace Client.MVVM.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase, INotificationHandler<RecognizedNotification>
+    public class MainWindowViewModel : ViewModelBase
     {
         private ViewModelBase _currentChildView;
         private string _title;
@@ -23,8 +23,8 @@ namespace Client.MVVM.ViewModels
 
         private ConfigurationService _configurationService;
         private RecognizeService _recognizeService;
-        private CommunicationViewModel _communicationViewModel;
-        private CommunicationWindow _communicationWindow;
+        private RecognizedTextViewModel _communicationViewModel;
+        private RecognizedTextWindow _communicationWindow;
 
         public ViewModelBase CurrentChildView
         {
@@ -64,12 +64,18 @@ namespace Client.MVVM.ViewModels
             OnPropertyChanged(nameof(Icon));
         }
 
-        public MainWindowViewModel(ConfigurationService configurationService, RecognizeService recognizeService, CommunicationViewModel communicationViewModel, CommunicationWindow communicationWindow)
+        public MainWindowViewModel(ConfigurationService configurationService, RecognizeService recognizeService, RecognizedTextViewModel communicationViewModel, RecognizedTextWindow communicationWindow)
         {
             _configurationService = configurationService;
             _recognizeService = recognizeService;
             _communicationWindow = communicationWindow;
             _communicationViewModel = communicationViewModel;
+            Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                _communicationWindow = IocConfiguration.Get<RecognizedTextWindow>();
+                _communicationViewModel = IocConfiguration.Get<RecognizedTextViewModel>();
+                _communicationWindow.DataContext = _communicationViewModel;
+            });
 
             //Initialize commands
             ShowCommandsViewCommand = new ViewModelCommand(ExecuteShowCommandsViewCommand);
@@ -82,7 +88,7 @@ namespace Client.MVVM.ViewModels
 
         private void ExecuteToggleActivationIgniCommand(object obj)
         {
-            if(obj is bool status)
+            if (obj is bool status)
             {
                 if (status)
                 {
@@ -114,23 +120,6 @@ namespace Client.MVVM.ViewModels
             CurrentChildView = IocConfiguration.Get<SettingsViewModel>();
             Title = "Settings board";
             Icon = IconChar.Gear;
-        }
-
-        public async Task Handle(RecognizedNotification notification, CancellationToken cancellationToken)
-        {
-            Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                var window = new CommunicationWindow();
-                window.RecognizedT.Content = notification.Text;
-                window.Show();
-                Thread.Sleep(5000);
-                window.Hide();
-                //_communicationWindow.DataContext = _communicationViewModel;
-                //_communicationWindow.Show();
-                //_communicationViewModel.RecognizedText = notification.Text;
-                //Thread.Sleep(5000);
-                //_communicationWindow.Hide();
-            });
         }
 
     }

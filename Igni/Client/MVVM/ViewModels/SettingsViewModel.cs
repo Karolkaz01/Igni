@@ -4,10 +4,13 @@ using Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Client.MVVM.ViewModels
 {
@@ -78,7 +81,7 @@ namespace Client.MVVM.ViewModels
             {
                 voiceIndex = value;
                 _configurationService.SetSetting("Voice", voicesDictionary.FirstOrDefault(k => k.Key == voices[value]).Value);
-                OnPropertyChanged(nameof(Voices));
+                OnPropertyChanged(nameof(VoiceIndex));
                 UpdateSettings();
                 OnPropertyChanged(nameof(Settings));
             }
@@ -99,7 +102,85 @@ namespace Client.MVVM.ViewModels
             }
         }
 
-        
+        private string infoText = string.Empty;
+
+        public string InfoText
+        {
+            get
+            {
+                return infoText;
+            }
+            set
+            {
+                infoText = value;
+                OnPropertyChanged(nameof(InfoText));
+            }
+        }
+
+        private Brush infoColor = new SolidColorBrush(Colors.Green);
+
+        public Brush InfoColor
+        {
+            get
+            {
+                return infoColor;
+            }
+            set
+            {
+                infoColor = value;
+                OnPropertyChanged(nameof(InfoColor));
+            }
+        }
+
+        private Visibility infoVisible = Visibility.Collapsed;
+        public Visibility InfoVisible
+        {
+            get
+            {
+                return infoVisible;
+            }
+            set
+            {
+                infoVisible = value;
+                OnPropertyChanged(nameof(InfoVisible));
+            }
+        }
+
+        private bool popUpWindowEnabled = false;
+
+        public bool PopUpWindowEnabled
+        {
+            get
+            {
+                return popUpWindowEnabled;
+            }
+            set
+            {
+                popUpWindowEnabled = value;
+                _configurationService.SetSetting("PopUpWindowEnabled", value.ToString());
+                OnPropertyChanged(nameof(PopUpWindowEnabled));
+                UpdateSettings();
+                OnPropertyChanged(nameof(Settings));
+            }
+        }
+
+        private bool responseTextEnabled = false;
+
+        public bool ResponseTextEnabled
+        {
+            get
+            {
+                return responseTextEnabled;
+            }
+            set
+            {
+                responseTextEnabled = value;
+                _configurationService.SetSetting("ResponseTextEnabled", value.ToString());
+                OnPropertyChanged(nameof(ResponseTextEnabled));
+                UpdateSettings();
+                OnPropertyChanged(nameof(Settings));
+            }
+        }
 
         public ICommand DeleteSettingCommand { get; }
         public ICommand SaveCommand { get; }
@@ -110,11 +191,12 @@ namespace Client.MVVM.ViewModels
             UpdateSettings();
             SetUpKeyWord();
             SetUpVoices();
+            SetUpCheckboxes();
             DeleteSettingCommand = new ViewModelCommand(ExecuteDeleteSettingCommand); 
             SaveCommand = new ViewModelCommand(ExecuteSaveCommand);
         }
 
-        private void ExecuteSaveCommand(object obj)
+        private async void ExecuteSaveCommand(object obj)
         {
             var settingsNamesList = Settings.Select(s => s.Name).ToList();
             var settingsNamesHashSet = new HashSet<string>(settingsNamesList);
@@ -122,11 +204,11 @@ namespace Client.MVVM.ViewModels
             {
                 var settingsConfig = Settings.ToDictionary(s => s.Name, s => s.Value);
                 _configurationService.SaveSettingsConfig(settingsConfig);
-                //Save Display
+                DisplayInformation("Data has been successfully saved", false);
             }
             else
             {
-                //Error Display
+                DisplayInformation("Settings can't have duplicates", true);
             }
         }
         private void ExecuteDeleteSettingCommand(object obj)
@@ -136,6 +218,17 @@ namespace Client.MVVM.ViewModels
                 Settings.Remove(setting);
                 _configurationService.DeleteSetting(setting.Name);
             }
+        }
+
+        private void SetUpCheckboxes()
+        {
+            var popUpEnabled = _configurationService.GetSetting("PopUpWindowEnabled");
+            if (bool.TryParse(popUpEnabled,out bool popUpBool))
+                PopUpWindowEnabled = popUpBool;
+
+            var responseTextEnabled = _configurationService.GetSetting("ResponseTextEnabled");
+            if (bool.TryParse(responseTextEnabled, out bool responseTextBool))
+                ResponseTextEnabled = responseTextBool;
         }
 
         private void SetUpKeyWord()
@@ -151,7 +244,7 @@ namespace Client.MVVM.ViewModels
                 _configurationService.SetSetting("ActivationKeyword", currentKeyWord.Value);
             }
             ActivationKeys = new ObservableCollection<string>(activationDictionary.Keys.ToList());
-            keyWordIndex = ActivationKeys.IndexOf(currentKeyWord.Key);
+            KeyWordIndex = ActivationKeys.IndexOf(currentKeyWord.Key);
         }
 
         private void SetUpVoices()
@@ -169,12 +262,24 @@ namespace Client.MVVM.ViewModels
                 _configurationService.SetSetting("Voice", currentVoice.Value);
             }
             Voices = new ObservableCollection<string>(voicesDictionary.Keys.ToList());
-
+            VoiceIndex = Voices.IndexOf(currentVoice.Key);
         }
 
         private void UpdateSettings()
         {
             Settings = new ObservableCollection<SettingMVVM>( _configurationService.GetAllSettings().Select(s => new SettingMVVM { Name = s.Key, Value = s.Value }).ToList());
+        }
+
+        private async void DisplayInformation(string text, bool isError)
+        {
+            InfoText = text;
+            InfoColor = isError ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Green);
+            InfoVisible = Visibility.Visible;
+
+            await Task.Delay(3000);
+
+            InfoVisible = Visibility.Collapsed;
+
         }
     }
 }

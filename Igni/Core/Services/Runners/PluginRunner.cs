@@ -2,6 +2,7 @@
 using Core.Models.Configuration;
 using Core.Services.Plugins;
 using Igni.SDK;
+using Serilog;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
@@ -12,7 +13,7 @@ namespace Core.Services.Runners
         private readonly ConfigurationService _configurationService;
         private readonly PluginsManager _pluginsManager;
 
-        private IDictionary<PluginConfig,IIgniPlugin> Plugins { get; set; }
+        private IDictionary<PluginConfig, IIgniPlugin> Plugins { get; set; }
         private IDictionary<string, PluginConfig> PluginsCongig { get; set; }
 
         public PluginRunner(ConfigurationService configurationService, PluginsManager pluginsManager)
@@ -41,33 +42,47 @@ namespace Core.Services.Runners
 
         private async Task SafeInitializePluginAsync(IIgniPlugin plugin)
         {
-            CancellationTokenSource source = new CancellationTokenSource();
-            Task initializePlugin = Task.Run(() => plugin.Initialize(source.Token));
+            try
+            {
+                CancellationTokenSource source = new CancellationTokenSource();
+                Task initializePlugin = Task.Run(() => plugin.Initialize(source.Token));
 
-            if (await Task.WhenAny(initializePlugin, Task.Delay(2000)) == initializePlugin)
-            {
-                Console.WriteLine($"Initialized Plugin");
+                if (await Task.WhenAny(initializePlugin, Task.Delay(2000)) == initializePlugin)
+                {
+                    Console.WriteLine($"Initialized Plugin");
+                }
+                else
+                {
+                    source.Cancel();
+                    Console.WriteLine($"Plugin {plugin} initialization cancelled");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                source.Cancel();
-                Console.WriteLine($"Plugin {plugin} initialization terminated");
+                Log.Warning($"Plugin {plugin.ToString()} crashed while initializing");
             }
         }
 
         private async Task SafeExcecutePluginAsync(IIgniPlugin plugin, string speech)
         {
-            CancellationTokenSource source = new CancellationTokenSource();
-            Task initializePlugin = Task.Run(() => plugin.ExcecuteAsync(source.Token, speech));
+            try
+            {
+                CancellationTokenSource source = new CancellationTokenSource();
+                Task executePlugin = Task.Run(() => plugin.Execute(source.Token, speech));
 
-            if (await Task.WhenAny(initializePlugin, Task.Delay(2000)) == initializePlugin)
-            {
-                Console.WriteLine($"Initialized Plugin");
+                if (await Task.WhenAny(executePlugin, Task.Delay(2000)) == executePlugin)
+                {
+                    Console.WriteLine($"Initialized Plugin");
+                }
+                else
+                {
+                    source.Cancel();
+                    Console.WriteLine($"Plugin {plugin} execution cancelled");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                source.Cancel();
-                Console.WriteLine($"Plugin {plugin} excecution canceled");
+                Log.Warning($"Plugin {plugin.ToString()} crashed while executing");
             }
         }
     }

@@ -1,6 +1,6 @@
 $currentDate = Get-Date
 
-$formattedDate = $currentDate.ToString("'Teraz jest' dddd MM/dd/yyyy 'i mamy godzine' HH:mm")
+$formattedDate = $currentDate.ToString("'Today is ' MM/dd/yyyy HH:mm")
 
 Write-Host $formattedDate
 Get-Date

@@ -1,4 +1,5 @@
-﻿using Core.Services.Speech;
+﻿using Core.Services.Runners;
+using Core.Services.Speech;
 using Igni.SDK;
 using Microsoft.CognitiveServices.Speech;
 using System;
@@ -15,12 +16,14 @@ namespace Core.Services
         private readonly SpeechService _speechService;
         private readonly CommunicationService _comunicationService;
         private readonly ConfigurationService _configurationService;
+        private readonly CommandRunner _commandRunner;
 
-        public IgniContext(SpeechService speechService, CommunicationService comunicationService, ConfigurationService configurationService)
+        public IgniContext(SpeechService speechService, CommunicationService comunicationService, ConfigurationService configurationService, CommandRunner commandRunner)
         {
             _speechService = speechService;
             _comunicationService = comunicationService;
             _configurationService = configurationService;
+            _commandRunner = commandRunner;
         }
 
         public async Task<SpeechRecognitionResult> RecognizeOneSpeechAsync()
@@ -29,9 +32,14 @@ namespace Core.Services
             return response;
         }
 
+        public int GetCurrentCommandRunCount()
+        {
+            return _commandRunner.CurrentCommandsRunCount;
+        }
+
         public void Speak(string text)
         {
-            _comunicationService.Speek(text);
+            _comunicationService.Speak(text);
         }
     }
 }

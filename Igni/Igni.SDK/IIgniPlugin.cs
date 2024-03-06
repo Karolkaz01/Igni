@@ -5,6 +5,6 @@
         IIgniContext Context { get; set; }
 
         void Initialize(CancellationToken? cancellationTokens);
-        void ExcecuteAsync(CancellationToken? cancellationToken, string speech);
+        void Execute(CancellationToken? cancellationToken, string speech);
     }
 }

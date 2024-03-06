@@ -1,11 +1,13 @@
 ﻿using Client.MVVM.ViewModels;
 using Core.Consts;
+using Core.Models.Notifications;
 using Core.Services;
 using Core.Services.Plugins;
 using Core.Services.Runners;
 using Core.Services.Speech;
 using Igni.SDK;
 using MediatR;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,9 +36,14 @@ namespace Client
                         Environment.GetEnvironmentVariable("SpeechToTextRegion")
                      );
             speechConfig.SpeechRecognitionLanguage = "en-GB";
-            speechConfig.SpeechSynthesisVoiceName = "en-AU-NeilNeural";
-            //var keyWrodPath = Paths.KEYWORDS + configuration.GetSetting("ActivationKeyword");
-            var keyWordModel = KeywordRecognitionModel.FromFile(configuration.GetSetting("ActivationKeyword"));
+            var voiceSetting = configuration.GetSetting("Voice") ?? "None";
+            speechConfig.SpeechSynthesisVoiceName = voiceSetting;
+            var keyWordSetting = configuration.GetSetting("ActivationKeyword") ?? configuration.GetKeyWords().FirstOrDefault().Value;
+            var keyWordPath = Directory.GetCurrentDirectory() + Paths.KEYWORDS + keyWordSetting;
+            keyWordPath = @"E:\HeyCompyuter.table";
+            var keyWordModel = KeywordRecognitionModel.FromFile(keyWordPath);
+
+            RecognizedTextViewModel communicationViewModel = new RecognizedTextViewModel();
 
             host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
@@ -58,14 +65,15 @@ namespace Client
                     services.AddSingleton<CommunicationService>();
                     services.AddSingleton<IIgniContext, IgniContext>();
                     services.AddMediatR(typeof(RecognizeService));
-                    services.AddMediatR(typeof(MainWindowViewModel));
+                    services.AddMediatR(typeof(SingletonNotification));
+                    services.AddSingleton<SingletonNotification>();
                     services.AddSingleton<CommandsViewModel>();
                     services.AddSingleton<PluginsViewModel>();
                     services.AddSingleton<SettingsViewModel>();
-                    services.AddSingleton<MainWindowViewModel>();
-                    services.AddSingleton<CommunicationViewModel>();
-                    services.AddSingleton<CommunicationWindow>();
                     services.AddSingleton<MainWindow>();
+                    services.AddSingleton<MainWindowViewModel>();
+                    services.AddSingleton<RecognizedTextViewModel>();
+                    services.AddSingleton<RecognizedTextWindow>();
                 })
                 .Build();
 

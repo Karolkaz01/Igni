@@ -93,7 +93,8 @@
                     <!-- Menu Buttons -->
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color1}"
-                                 Command="{Binding ShowCommandsViewCommand}">
+                                 Command="{Binding ShowCommandsViewCommand}"
+                                 IsChecked="True">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Terminal"  Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Commands" Style="{StaticResource menuButtonText}"/>

@@ -15,24 +15,31 @@ namespace Core.Services.Runners
         private readonly ConfigurationService _configurationService;
         private readonly CommunicationService _comunicationService;
 
+        private int currentCommandsRunCount;
+        public int CurrentCommandsRunCount { get { return currentCommandsRunCount; } }
+
         public CommandRunner(PowerShellHandler powerShellHandler, ConfigurationService configurationService, CommunicationService comunicationService)
         {
             _powerShellHandler = powerShellHandler;
             _configurationService = configurationService;
             _comunicationService = comunicationService;
+            currentCommandsRunCount = 0;
         }
 
         public async Task PerformCommandsAsync(string speech)
         {
             var allCommands = _configurationService.GetAllCommands();
             var text = speech.ToLower();
+            var runCommandsCount = 0;
             foreach (var command in allCommands)
             {
                 if (text.StartsWith(command.ActivationCommand.ToLower()))
                 {
                     CommandRecognizedAsync(command);
+                    runCommandsCount++;
                 }
             }
+            currentCommandsRunCount = runCommandsCount;
         }
 
         private async void CommandRecognizedAsync(Command command)
@@ -44,7 +51,7 @@ namespace Core.Services.Runners
                 case CommandType.runCommand:
                     RunCommandAsync(command);
                     break;
-                case CommandType.feedbackCoomand:
+                case CommandType.feedbackCommand:
                     RunFeedbackCommandAsync(command);
                     break;
                 case CommandType.runScript:
@@ -69,7 +76,7 @@ namespace Core.Services.Runners
             var feedback = await _powerShellHandler.RunScript(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if(feedback != null)
-                _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());
+                _comunicationService.Speak(feedback?.FirstOrDefault()?.ToString());
         }
 
         private async void RunScriptAsync(Command command)
@@ -82,7 +89,7 @@ namespace Core.Services.Runners
             var feedback = await _powerShellHandler.RunScriptByFileName(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if (feedback != null)
-                _comunicationService.Speek(feedback?.FirstOrDefault()?.ToString());
+                _comunicationService.Speak(feedback?.FirstOrDefault()?.ToString());
         }
 
         private void ErrorCommandType()

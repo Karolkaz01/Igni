@@ -27,10 +27,16 @@
                                    Margin="0,0,0,20">
                             Explore boundless possibilities in our Plugins Management Tab, your gateway to a personalized application experience. Effortlessly enhance your toolkit by adding new plugins, tidy up by removing unnecessary ones, and seize control with the ability to toggle plugins on or off. This centralized hub puts customization at your fingertips, ensuring your app evolves alongside your preferences. Let your creativity flourish as you shape the perfect ecosystem for your needs.
                         </TextBlock>
-                        <Button Grid.Column="1" Style="{StaticResource saveButton}"  Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
-                            <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
-                        </Button>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <Button Style="{StaticResource saveButton}" Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10">
+                                <fa:IconImage Foreground="White" Icon="Folder" Width="20" Height="20"/>
+                            </Button>
+                            <Button Grid.Column="1" Style="{StaticResource saveButton}"  Width="60" Height="35" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding SaveCommand}" Margin="10">
+                                <fa:IconImage Foreground="White" Icon="Save" Width="20" Height="20"/>
+                            </Button>
+                        </StackPanel>
                     </Grid>
+                    <Label Visibility="{Binding InfoVisible}" FontWeight="Bold" HorizontalAlignment="Center" Content="{Binding InfoText}" Foreground="{Binding InfoColor}" FontSize="20" />
                 </StackPanel>
                 <Border Background="Transparent" CornerRadius="5" Margin="0,4" Padding="7">
                     <StackPanel>
@@ -49,7 +55,7 @@
                                 <valid:PluginValidationRule ValidationStep="CommittedValue"/>
                             </DataGrid.RowValidationRules>
                             <DataGrid.Columns>
-                                <DataGridCheckBoxColumn Binding="{Binding IsEnabled}" Width="7*" CellStyle="{StaticResource DataGridCellStyle2}">
+                                <DataGridCheckBoxColumn Binding="{Binding IsEnabled}" Width="7*" ElementStyle="{StaticResource CheckBoxStyle2}" CellStyle="{StaticResource DataGridCellStyle2}">
                                     <DataGridCheckBoxColumn.HeaderTemplate>
                                         <DataTemplate>
                                             <fa:IconImage Icon="CheckSquare" Width="22" Height="22" Foreground="White"/>

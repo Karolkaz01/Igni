@@ -56,7 +56,6 @@ namespace Core.Services
             }
             else
             {
-                await _mediator.Publish(new UnrecognizedNotification());
                 _communicationService.Unrecognized();
             }
             _KWService.StartRecognising();
