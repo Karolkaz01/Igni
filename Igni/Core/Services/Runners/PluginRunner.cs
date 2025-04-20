@@ -68,7 +68,7 @@ namespace Core.Services.Runners
             try
             {
                 CancellationTokenSource source = new CancellationTokenSource();
-                Task executePlugin = Task.Run(() => plugin.Execute(source.Token, speech));
+                Task executePlugin = Task.Run(() => plugin.ExecuteAsync(source.Token, speech));
 
                 if (await Task.WhenAny(executePlugin, Task.Delay(2000)) == executePlugin)
                 {

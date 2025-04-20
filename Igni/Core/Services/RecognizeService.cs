@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using Core.Consts;
+using Core.Enums;
 using Core.Models.Configuration;
 using Core.Models.Notifications;
 using Core.Services.Runners;
@@ -6,6 +7,7 @@ using Core.Services.Speech;
 using MediatR;
 using Microsoft.CognitiveServices.Speech;
 using Serilog;
+using System.Media;
 using System.Speech.Recognition;
 
 namespace Core.Services
@@ -17,6 +19,7 @@ namespace Core.Services
         private readonly CommunicationService _communicationService;
         private readonly CommandRunner _commandRunner;
         private readonly PluginRunner _pluginRunner;
+        private readonly SoundPlayer _soundPlayer;
 
         private readonly IMediator _mediator;
 
@@ -29,6 +32,8 @@ namespace Core.Services
             _communicationService = communicationService;
             _commandRunner = commandRunner;
             _pluginRunner = pluginRunner;
+            _soundPlayer = new SoundPlayer();
+            _soundPlayer.SoundLocation = Path.Combine(Directory.GetCurrentDirectory(), Paths.SOUNDS, "NotificationSound.wav");
         }
 
         public void StartListening()
@@ -44,8 +49,7 @@ namespace Core.Services
 
         public async Task Handle(KeywordRecognizedNotification notification, CancellationToken cancellationToken)
         {
-            //TODO: add beep sound
-            Console.Beep();
+            _soundPlayer.Play();
             var response = await _STTService.RecognizeOneSpeechAsync();
             if (response.Reason == ResultReason.RecognizedSpeech)
             {

@@ -148,6 +148,8 @@ namespace Core.Services
                 });
             }
 
+            //TEST
+            Console.WriteLine("TEST Install ACTION");
             Synchronize();
         }
 

@@ -23,6 +23,11 @@ namespace Core.Services
             _mediator = mediator;
         }
 
+        public async void RecognizedSpeechAsync(string text)
+        {
+            await _mediator.Publish(new RecognizedNotification(text));
+        }
+
         public void Speak(string text)
         {
             var voiceSetting = _configurationService.GetSetting("Voice");
@@ -39,6 +44,11 @@ namespace Core.Services
             if (!string.IsNullOrEmpty(voiceSetting) && !voiceSetting.Equals("None"))
                 _speechService.Speak("I'm sorry, I didn't understand you");
             Log.Warning("Speech unrecognized");
+        }
+
+        public async void CancelSpeechAsync()
+        {
+            _speechService.CancelSpeechAsync();
         }
     }
 }

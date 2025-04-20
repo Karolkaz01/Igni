@@ -23,5 +23,9 @@ namespace Core.Services.Speech
             return _synthesizer.SpeakTextAsync(text);
         }
 
+        public async void CancelSpeechAsync()
+        {
+            _synthesizer.StopSpeakingAsync();
+        }
     }
 }

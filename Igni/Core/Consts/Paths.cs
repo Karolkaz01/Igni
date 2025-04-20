@@ -9,7 +9,10 @@ namespace Core.Consts
     public static class Paths
     {
         public static string CONFIGURATION => @"\Configuration\Configuration.json";
-        public static string PLUGINS => @"Plugins";
         public static string KEYWORDS => @"\Configuration\KeyWords\";
+        public static string PLUGINS => @"Plugins";
+        public static string SOUNDS => @"Sounds";
+        public static string SCRIPTS => @"Scripts";
+
     }
 }

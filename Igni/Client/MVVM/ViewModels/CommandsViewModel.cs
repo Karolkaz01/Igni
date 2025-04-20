@@ -169,5 +169,4 @@ namespace Client.MVVM.ViewModels
 
         }
     }
-    
 }

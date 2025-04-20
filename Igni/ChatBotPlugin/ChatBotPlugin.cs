@@ -8,7 +8,7 @@ namespace ChatBotPlugin
     {
         public IIgniContext Context { get; set; }
 
-        private readonly string APIKey = "";
+        private readonly string APIKey = "???";
         private readonly string endpoint = "https://api.openai.com/v1/chat/completions";
 
         private readonly OpenAIAPI OpenAi;
@@ -23,8 +23,10 @@ namespace ChatBotPlugin
         {
         }
 
-        public async void Execute(CancellationToken? cancellationToken, string speech)
+        public async void ExecuteAsync(CancellationToken? cancellationToken, string speech)
         {
+            await Task.Delay(1);
+
             var conversation = OpenAi.Chat.CreateConversation();
 
             if (Context.GetCurrentCommandRunCount() == 0)
@@ -37,7 +39,7 @@ namespace ChatBotPlugin
             if (!speech.Equals("Listen."))
                 return;
 
-            var conversation = OpenAi.Chat.CreateConversation();
+            Context.StopListening();
 
             while (true)
             {
@@ -57,10 +59,10 @@ namespace ChatBotPlugin
                 }
                 else if (speechResult.Reason == ResultReason.NoMatch)
                 {
-                    Context.Speak("Sorry, I didn't understand that.");
                 }
             };
 
+            Context.StartListening();
         }
     }
 }

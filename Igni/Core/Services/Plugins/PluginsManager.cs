@@ -1,6 +1,7 @@
 ﻿using Core.Consts;
 using Core.Models.Configuration;
 using Igni.SDK;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -34,12 +35,19 @@ namespace Core.Services.Plugins
 
             foreach (var pluginConfigKeyValue in pluginsConfigsDictionary)
             {
-                var pluginAssembly = LoadAssemblyPlugin(pluginConfigKeyValue.Value);
-                var pluginInstance = CreatePlugin(pluginAssembly);
-
-                if (pluginInstance != null)
+                try
                 {
-                    pluginsLists.Add(pluginConfigKeyValue.Value, pluginInstance);
+                    var pluginAssembly = LoadAssemblyPlugin(pluginConfigKeyValue.Value);
+                    var pluginInstance = CreatePlugin(pluginAssembly);
+
+                    if (pluginInstance != null)
+                    {
+                        pluginsLists.Add(pluginConfigKeyValue.Value, pluginInstance);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Can't load plugin from file{pluginConfigKeyValue.Key}");
                 }
             }
 
@@ -57,13 +65,13 @@ namespace Core.Services.Plugins
         private IIgniPlugin? CreatePlugin(Assembly pluginAssembly)
         {
             var types = pluginAssembly.GetTypes();
-                //.Where(t => typeof(IIgniPlugin).IsAssignableFrom(t) && !t.IsInterface).ToArray();
+            //.Where(t => typeof(IIgniPlugin).IsAssignableFrom(t) && !t.IsInterface).ToArray();
 
             foreach (var type in types)
             {
                 if (typeof(IIgniPlugin).IsAssignableFrom(type))
                 {
-                    var plugin = Activator.CreateInstance(type,_igniContext) as IIgniPlugin;
+                    var plugin = Activator.CreateInstance(type, _igniContext) as IIgniPlugin;
 
                     if (plugin != null)
                         return plugin;

@@ -34,6 +34,11 @@
           "activationCommand": "Play Tetris melody",
           "commandType": 2,
           "value": "PlayTetricMelody.ps1"
+        },
+        {
+          "activationCommand": "Take screenshot",
+          "commandType": 3,
+          "value": "TakeScreenShot.ps1"
         }
       ]
     },
@@ -45,6 +50,11 @@
           "activationCommand": "Change theme mode",
           "commandType": 2,
           "value": "ChangeThemeMode.ps1"
+        },
+        {
+          "activationCommand": "how much free space",
+          "commandType": 3,
+          "value": "FreeSpaceOnDisk.ps1"
         }
       ]
     },
@@ -52,6 +62,11 @@
       "name": "User commands",
       "description": "Commands created by user",
       "values": [
+        {
+          "activationCommand": "Generate password",
+          "commandType": 3,
+          "value": "GeneratePassword.ps1"
+        }
       ]
     }
   },
@@ -59,21 +74,46 @@
     "ActivationKeyword": "HeyCompyuter.table",
     "Voice": "en-AU-NeilNeural",
     "PopUpWindowEnabled": true,
-    "ResponseTextEnabled  ": true,
-    "PopUpDisappearTimer": 3
+    "ResponseTextEnabled": true,
+    "PopUpDisappearTimer": 3,
+    "CloseAppNamesMapping": "{ 'Epic Games': 'EpicGamesLauncher', 'Teams': 'ms-teams' }",
+    "NotesDirectory": "C:\\IgniNotes"
   },
   "KeyWords": {
-    "Hello Igni": "HelloIgniTestModel.table",
+    "Start Assistant": "StartAssistant.table",
+    "Start Computer": "StartComputer.table",
+    "Start Igni": "StartIgni.table",
+    "Hello Igni": "HelloIgni.table",
+    "Hello Computer": "HelloComputer.table",
+    "Hello Assistant": "HelloAssistant.table",
     "Hey Igni": "HeyIgni.table",
-    "Hey Compyuter": "HeyCompyuter.table",
-    "None":  "None"
+    "Hey Assistant": "HeyAssistant.table",
+    "Hey Computer": "HeyComputer.table",
+    "Hey Compyuter": "HeyCompyuter.table"
   },
   "Voices": {
     "Neil": "en-AU-NeilNeural",
     "William": "en-AU-WilliamNeural",
-    "Natasha": "en-AU-NatashaNeural"
+    "Natasha": "en-AU-NatashaNeural",
+    "Hindus": "en-IN-PrabhatNeural",
+    "Mitchell": "en-NZ-MitchellNeural",
+    "Jason": "en-US-JasonNeural",
+    "Tony": "en-US-TonyNeural",
+    "AI1": "en-US-AIGenerate1Neural",
+    "AI2": "en-US-AIGenerate2Neural",
+    "None": "None"
   },
   "pluginsInfo": {
+    "ToolsBotPlugin.dll": {
+      "DirectoryName": "ToolsBot",
+      "FileName": "ToolBotPlugin.dll",
+      "IsEnabled": true
+    },
+    "SearchBotPlugin.dll": {
+      "DirectoryName": "SearchBot",
+      "FileName": "SearchBotPlugin.dll",
+      "IsEnabled": true
+    },
     "ChatBotPlugin.dll": {
       "DirectoryName": "ChatBot",
       "FileName": "ChatBotPlugin.dll",

@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Plugins\" />
+    <Folder Include="Sounds\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,13 +30,34 @@
     <None Update="Configuration\Configuration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configuration\KeyWords\HelloAssistant.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HelloComputer.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HelloIgni.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HeyAssistant.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\HeyComputer.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configuration\KeyWords\HeyCompyuter.table">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Configuration\KeyWords\HelloIgniTestModel.table">
+    <None Update="Configuration\KeyWords\HeyIgni.table">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Configuration\KeyWords\HeyIgni.table">
+    <None Update="Configuration\KeyWords\StartAssistant.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\StartComputer.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configuration\KeyWords\StartIgni.table">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Plugins\PluginsHere.txt">
@@ -47,10 +69,22 @@
     <None Update="Scripts\ChangeThemeMode.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Scripts\FreeSpaceOnDisk.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\GeneratePassword.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\PlayTetricMelody.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Scripts\TakeScreenShot.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\TellMeWhatTimeIsIt.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\NotificationSound.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

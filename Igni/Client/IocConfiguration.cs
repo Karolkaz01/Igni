@@ -39,12 +39,21 @@ namespace Client
             var voiceSetting = configuration.GetSetting("Voice") ?? "None";
             speechConfig.SpeechSynthesisVoiceName = voiceSetting;
             var keyWordSetting = configuration.GetSetting("ActivationKeyword") ?? configuration.GetKeyWords().FirstOrDefault().Value;
-            var keyWordPath = Directory.GetCurrentDirectory() + Paths.KEYWORDS + keyWordSetting;
-            keyWordPath = @"E:\HeyCompyuter.table";
-            var keyWordModel = KeywordRecognitionModel.FromFile(keyWordPath);
+            KeywordRecognitionModel keyWordModel;
+            try
+            {
+                var keyWordPath = Directory.GetCurrentDirectory() + Paths.KEYWORDS + keyWordSetting;
+#if DEBUG
+                keyWordPath = @"E:\HeyCompyuter.table";
+#endif
+                keyWordModel = KeywordRecognitionModel.FromFile(keyWordPath);
 
-            RecognizedTextViewModel communicationViewModel = new RecognizedTextViewModel();
+            }
+            catch (Exception ex)
+            {
 
+                keyWordModel = KeywordRecognitionModel.FromFile(keyWordSetting);
+            }
             host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                 {
@@ -81,8 +90,9 @@ namespace Client
                 .WriteTo.Console()
                 .WriteTo.File("logs\\IgniLogs-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-
+#if DEBUG
             configuration.GenerateDefaultOpenAppCommandsAsync();
+#endif
         }
 
         public static T? Get<T>()

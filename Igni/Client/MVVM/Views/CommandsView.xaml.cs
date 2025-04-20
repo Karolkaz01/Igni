@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Core.Consts;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +33,18 @@ namespace Client.MVVM.Views
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string directoryPath = System.IO.Path.Combine(Directory.GetCurrentDirectory() , Paths.SCRIPTS);
+
+            // Check if the directory exists
+            if (System.IO.Directory.Exists(directoryPath))
+            {
+                // Open File Explorer to the specified directory
+                Process.Start("explorer.exe", directoryPath);
+            }
         }
     }
 }

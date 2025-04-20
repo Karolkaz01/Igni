@@ -13,7 +13,7 @@ namespace Core.Services.Runners
     {
         private readonly PowerShellHandler _powerShellHandler;
         private readonly ConfigurationService _configurationService;
-        private readonly CommunicationService _comunicationService;
+        private readonly CommunicationService _communicationService;
 
         private int currentCommandsRunCount;
         public int CurrentCommandsRunCount { get { return currentCommandsRunCount; } }
@@ -22,8 +22,13 @@ namespace Core.Services.Runners
         {
             _powerShellHandler = powerShellHandler;
             _configurationService = configurationService;
-            _comunicationService = comunicationService;
+            _communicationService = comunicationService;
             currentCommandsRunCount = 0;
+        }
+
+        public void IncreaseCurrentCommandsRunCount()
+        {
+            currentCommandsRunCount++;
         }
 
         public async Task PerformCommandsAsync(string speech)
@@ -76,7 +81,7 @@ namespace Core.Services.Runners
             var feedback = await _powerShellHandler.RunScript(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if(feedback != null)
-                _comunicationService.Speak(feedback?.FirstOrDefault()?.ToString());
+                _communicationService.Speak(feedback?.FirstOrDefault()?.ToString());
         }
 
         private async void RunScriptAsync(Command command)
@@ -89,7 +94,7 @@ namespace Core.Services.Runners
             var feedback = await _powerShellHandler.RunScriptByFileName(command.Value);
             //Console.WriteLine(feedback?.FirstOrDefault()?.ToString());
             if (feedback != null)
-                _comunicationService.Speak(feedback?.FirstOrDefault()?.ToString());
+                _communicationService.Speak(feedback?.FirstOrDefault()?.ToString());
         }
 
         private void ErrorCommandType()

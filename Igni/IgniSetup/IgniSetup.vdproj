@@ -25,6 +25,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_E5B61C6D69CE4F1F89AABC61688A2B65"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -118,6 +124,14 @@
                 "Architecture" = "2:0"
                 "Runtime" = "2:0"
                 }
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_C9FEB7E1C22D481FB294B5B62997B0A7"
+                {
+                "Name" = "8:.NET Framework"
+                "Message" = "8:[VSDNETMSG]"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.7.2"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
+                }
             }
         }
         "File"
@@ -167,6 +181,17 @@
                     "Property" = "8:_90010E413AF94D358D504646BF80A09A"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_482553788C2C4BB6B6A93D8D6C09F384"
+                            {
+                            "Name" = "8:SearchBot"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_3F3D49C5713A46ED80196D1CA758E1E8"
+                                "Folders"
+                                {
+                                }
+                            }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_4E1C11DBB2A44B4084204C408C5B1329"
                             {
                             "Name" = "8:ChatBot"
@@ -174,6 +199,17 @@
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
                             "Property" = "8:_0617D3DD3A634DB7B582382EAE2E35AE"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_6DC567590DE94BACA8DF621DD5B463C7"
+                            {
+                            "Name" = "8:ToolsBot"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_DCC3FAF8A50C4A2EB1D08C6D90320A77"
                                 "Folders"
                                 {
                                 }
@@ -221,7 +257,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Igni"
         "ProductCode" = "8:{445DFF1D-6EB0-43F2-AB58-0C5C9F646FE0}"
-        "PackageCode" = "8:{AEDB95FD-C04F-4E08-A17C-D1D166C472F1}"
+        "PackageCode" = "8:{860BEA4F-3955-4E6C-B940-136639505391}"
         "UpgradeCode" = "8:{43E8C61F-77FB-4CD4-AC16-B20CBB83533F}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -796,9 +832,37 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_3A5E4A395B954389AD5B93F4C93A910C"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6DC567590DE94BACA8DF621DD5B463C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{D65DDBB7-E9E7-4152-8F05-1CF79C9584E0}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B0C8C92926AD4DE79F02C7F848F9B83C"
             {
-            "SourcePath" = "8:..\\Client\\obj\\Debug\\net8.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\Client\\obj\\Release\\net8.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_03837BBB3588412AACED2A3A81192A4A"
@@ -819,6 +883,62 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:PublishItems"
             "OutputProjectGuid" = "8:{3F1D9BFA-097E-4781-8E85-79AC0CDF4B9D}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B788BDB1F0644E09B2B5166CEBB25997"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_482553788C2C4BB6B6A93D8D6C09F384"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{177FCF80-5AF9-450A-9E6B-F45FFFB1F586}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E5B61C6D69CE4F1F89AABC61688A2B65"
+            {
+            "SourcePath" = "8:..\\InitializeConfigurationApp\\obj\\Release\\net8.0\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_03837BBB3588412AACED2A3A81192A4A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{F442BB86-C394-4B1A-9878-6D27A0D8B6B5}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
